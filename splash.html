@@ -1,0 +1,52 @@
+<html>
+<head>
+	<title>Rich Li for Senate</title>
+	<link rel="stylesheet" href="/index.css" />
+	<link rel="icon" href="/favicon.svg" />
+</head>
+<body>
+	<h1>Rich Li for Senate</h1>
+	<h2>Sign up now to get updates on Rich Li's campaign for MI Senate</h2>
+	<form id="signup-form">
+		<fieldset>
+			<div>
+			<label for="email">Email Address</label>
+			<input id="email" type="email" name="email" placeholder="Email* (user@email.com)" required="required">
+			</div>
+			<div>
+			<label for="phone">Phone</label>
+			<input id="phone" type="tel" name="phone" placeholder="Phone (123-456-7890)">
+			</div>
+			<div>
+			<label for="zip">Zip Code</label>
+			<input id="zip" type="text" name="zip" placeholder="Zip* (12345)", required="required">
+			</div>
+			<input id="submit" type="submit" placeholder="Sign Up" value="Sign Up">
+		</fieldset>
+		<p id="submit-progress"></p>
+	</form>
+	<script>
+		const form = document.getElementById('signup-form');
+		const progress = document.getElementById('submit-progress');
+		form.onsubmit = async (event) => {
+			progress.innerText = 'Submitting...';
+			event.preventDefault();
+			const data = Object.fromEntries((new FormData(form)).entries());
+			const url = 'https://f6c0lp8qlc.execute-api.us-east-2.amazonaws.com/signup';
+			const response = await fetch(url, {
+				method: 'POST',
+				mode: 'cors',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(data)
+			});
+			if (response.ok) {
+				window.location.href = '/signup-success.html';
+			} else {
+				progress.innerText = (await response.json()).message;
+			}
+		}
+	</script>
+</body>
+</html>
