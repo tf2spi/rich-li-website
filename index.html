@@ -1,49 +1,52 @@
 <html>
 <head>
-	<title>Rich Li for MI-5</title>
+	<title>Rich Li for Senate</title>
 	<link rel="stylesheet" href="/index.css" />
 	<link rel="icon" href="/favicon.svg" />
 </head>
 <body>
-<div class="hero-signup">
-<form method="POST" action="/signup?candidate=alexandria-ocasio-cortez-production" id="signup-form">
-  <input type="hidden" name="_csrf_token" value="BQ4PQAdeQgEqDSsIWAoufAE8NQleBQUfPoXuT0tefISMjpAJ1cmql1Qn">
-  <div class="signup-form">
-    <h2 class="title">Join Our Campaign</h2>
-    <h3 class="subtitle">
-For info and updates
-    </h3>
-    <div class="form-inputs">
-      <input class="brand-input" type="text" name="name" placeholder="Name*" required="required">
-      <input class="brand-input" type="email" name="email" placeholder="Email*" required="required">
-      <input class="brand-input" type="tel" name="phone" placeholder="Phone">
-      <input class="brand-input" type="text" name="zip" required="required" placeholder="Zip*">
-      <input type="hidden" name="action_source" value="homepage">
-      <input class="brand-input button" id="join-submit" type="submit" value="Join Us">
-    </div>
-  </div>
-</form>
-
-<script>
- formSubmit('signup-form', 'Hero | Signup | Join Our Campaign');
-</script>
-
-
-</div>
-<div id="main-nav" class="navbar">
-  <div class="main-nav">
-    <div class="nav">
-        <a href="/" class="logo-link">
-        <img class="logo" src="favicon.svg">
-      </a>
-      <div class="nav-items">
-        <button title="Home" tabindex="0" class="nav-item hide-md-down " onclick="headerLinkClick('/', 'Link', 'About'); return false;">Home</button>
-        <button title="About" tabindex="0" class="nav-item hide-md-down " onclick="headerLinkClick('/about.html', 'Link', 'About'); return false;">About</button>
-        <button title="Get Involved" tabindex="0" class="nav-item hide-md-down " onclick="headerLinkClick('/get-involved.html', 'Link', 'Vote'); return false;">Get Involved</button>
-        <a title="Contribute" tabindex="0" class="nav-item contribute-button" href="https://secure.actblue.com/donate/ocasio2020" target="_blank" onclick="headerLinkClick('https://secure.actblue.com/donate/ocasio2020', 'Button', 'Contribute', false);">Contribute</a>
-      </div>
-    </div>
-  </div>
-</div>
+	<h1>Rich Li for Senate</h1>
+	<h2>Sign up now to get updates on Rich Li's campaign for MI Senate</h2>
+	<form id="signup-form">
+		<fieldset>
+			<div>
+			<label for="email">Email Address</label>
+			<input id="email" type="email" name="email" placeholder="Email* (user@email.com)" required="required">
+			</div>
+			<div>
+			<label for="phone">Phone</label>
+			<input id="phone" type="tel" name="phone" placeholder="Phone (123-456-7890)">
+			</div>
+			<div>
+			<label for="zip">Zip Code</label>
+			<input id="zip" type="text" name="zip" placeholder="Zip* (12345)", required="required">
+			</div>
+			<input id="submit" type="submit" placeholder="Sign Up" value="Sign Up">
+		</fieldset>
+		<p id="submit-progress"></p>
+	</form>
+	<script>
+		const form = document.getElementById('signup-form');
+		const progress = document.getElementById('submit-progress');
+		form.onsubmit = async (event) => {
+			progress.innerText = 'Submitting...';
+			event.preventDefault();
+			const data = Object.fromEntries((new FormData(form)).entries());
+			const url = 'https://f6c0lp8qlc.execute-api.us-east-2.amazonaws.com/signup';
+			const response = await fetch(url, {
+				method: 'POST',
+				mode: 'cors',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(data)
+			});
+			if (response.ok) {
+				window.location.href = '/signup-success.html';
+			} else {
+				progress.innerText = (await response.json()).message;
+			}
+		}
+	</script>
 </body>
 </html>
